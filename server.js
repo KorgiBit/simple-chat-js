@@ -161,25 +161,51 @@ io.on('connection', async(socket)=> {
 
     socket.on("chat message", async (messageData) => {
         const fullMessageData = {
+            id: randomUUID(),
             user: userName,
             text: messageData.text,
             senderId: socket.id,
+            reactions: {},
             time: new Date().toLocaleTimeString('ru-RU', {hour: '2-digit',minute: '2-digit'})
         }
         io.emit("chat message", fullMessageData)
         // Сохраняем сообщение в истории
         const history = await readMessages()
         history.push({
+            id: fullMessageData.id,
             user: fullMessageData.user,
             text: fullMessageData.text,
+            reactions: fullMessageData.reactions,
             time: fullMessageData.time
         })
         if (history.length > MAX_MESSAGES) {
             history.splice(0, history.length - MAX_MESSAGES)
         }
         await writeMessages(history)
-
     })
+
+    socket.on("toggle reaction", async ({messageId, emoji}) => {
+        const history = await readMessages()
+        const message = history.find(m => m.id === messageId)
+        if (!message) return
+        if (!message.reactions) message.reactions = {}
+        if (!message.reactions[emoji]) message.reactions[emoji] = []
+
+        const users = message.reactions[emoji]
+        const index = users.indexOf(userName)
+        if (index === -1) {
+            users.push(userName)
+        } else {
+            users.splice(index, 1)
+            if (users.length === 0) {
+                delete message.reactions[emoji]
+            }
+        }
+        
+        await writeMessages(history)
+        io.emit("reaction updated", {messageId, reactions: message.reactions})
+    })
+
     socket.on("disconnect", ()=> {
         onlineUsers.delete(socket.id)
         io.emit("user left", userName)

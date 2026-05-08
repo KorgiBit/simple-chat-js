@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id='loginScreen' class="join-screen">
+    <div id="loginScreen" class="join-screen">
         <h1>Мини чат</h1>
         <p class="join-subtitle">Войдите в аккаунт</p>
         <input type="text" id="loginUsername" placeholder="Ваш ник" maxlength="20">
@@ -22,21 +22,23 @@
     <div id="registerScreen" class="join-screen hidden">
         <h1>Регистрация</h1>
         <p class="join-subtitle">Создайте аккаунт</p>
-        <input type="text" id="regUsername" placeholder="Ваш ник(мин 3 символа)" maxlength="20">
-        <input type="password" id="regPassword" placeholder="Ваш пароль(мин 4 символа)" maxlength="20">
+        <input type="text" id="regUsername" placeholder="Ваш ник (мин 3 символа)" maxlength="20">
+        <input type="password" id="regPassword" placeholder="Ваш пароль (мин 4 символа)" maxlength="20">
         <p id="regError" class="error-text hidden"></p>
         <button id="regSubmitButton">Зарегистрироваться</button>
         <button id="goToLoginButton" class="link-button">Уже есть аккаунт? Войти</button>
     </div>
-    
+
     <div id="chatScreen" class="chat-screen hidden">
         <header class="chat-header">
             <h1>Мини чат</h1>
-            <span id="currentUser" class="current-user"></span>
-            <button id="logoutButton" class="logout-button">Выйти</button>
+            <div class="header-right">
+                <span id="currentUser" class="current-user"></span>
+                <button id="logoutButton" class="logout-button">Выйти</button>
+            </div>
         </header>
         <div class="chat-body">
-            <aside id="sidebar" class="sidebar">
+            <aside class="sidebar">
                 <h3>Онлайн: <span id="onlineCount">0</span></h3>
                 <ul id="onlineList"></ul>
             </aside>
